@@ -1,8 +1,4 @@
 
-export function validateLogin(email, password) {
-  return true
-}
-
 export function validateSignupEmail(email) {
   return true
 }

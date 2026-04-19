@@ -1,44 +1,54 @@
 import { useState } from "react"
 import { Pages } from "../constants/pages"
-import { validateSignupEmail, validateSignupPassword, passwordRequirements } from "../utils/validation"
-import { registerUser } from "../utils/registration"
-import { fetchUserByEmail } from "../utils/user"
+import { validateSignupEmail, validateSignupPassword, passwordRequirements } from "../utils/authValidation"
+import { registerUser } from "../utils/api/authApi"
+import { fetchUserByEmail } from "../utils/api/userApi"
 
 function SignupPage({ setPage, auth: {user, setUser} }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
-  function handleSignup(e) {
+  async function handleSignup(e) {
     e.preventDefault()
+    setError("")
+    setIsLoading(true)
 
     if (password !== confirmPassword) {
       setError("Passwords don't match!")
+      setIsLoading(false)
       return
     }
 
     if (!validateSignupEmail(email)) {
       setError("Email address is not valid!")
+      setIsLoading(false)
       return
     }
 
     if (!validateSignupPassword(password)) {
       setError(passwordRequirements)
+      setIsLoading(false)
       return
     }
 
     // Try to register user
-    if (!registerUser(email, password)) {
-      setError("Failed to register, please report this bug!")
-      return
+    try {
+      await registerUser(email, password)
+
+      // Register successful
+      setUser(await fetchUserByEmail(email))
+      console.log("Signup successful")
+      setPage(Pages.HOME)
     }
-
-    // Register successful
-
-    console.log("Signup successful")
-    setUser(fetchUserByEmail(email))
-    setPage(Pages.HOME)
+    catch (err) {
+      setError(err.message)
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -64,6 +74,7 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
         <button type="submit">Signup</button>
       </form>
 
+      {isLoading && <p>Loading...</p>}
       <p>{error}</p>
 
       <p>Already have an account? <a onClick={() => setPage(Pages.LOGIN)}>Login</a></p>

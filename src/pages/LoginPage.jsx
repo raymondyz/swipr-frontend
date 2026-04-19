@@ -1,28 +1,36 @@
 import { useState } from "react"
 import { Pages } from "../constants/pages"
-import { validateLogin } from "../utils/validation"
-import { fetchUserByEmail } from "../utils/user"
+import { validateLogin } from "../utils/api/authApi"
+import { fetchUserByEmail } from "../utils/api/userApi"
 
 
 function LoginPage({ setPage, auth: {user, setUser} }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault()
+    setError("")
+    setIsLoading(true)
 
     // Validate login
-    if (!validateLogin(email, password)) {
-      console.log("Login failed")
-      setError("The email or password you entered is incorrect!")
-      return
+    try {
+      await validateLogin(email, password)
+      
+      // Login successful
+      setUser(await fetchUserByEmail(email))
+      console.log("Login successful")
+      setPage(Pages.HOME)
     }
-
-    // Login successful
-    setUser(fetchUserByEmail(email))
-    console.log("Login successful")
-    setPage(Pages.HOME)
+    catch (err) {
+      console.log("Login failed")
+      setError(err.message)
+    }
+    finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -43,6 +51,7 @@ function LoginPage({ setPage, auth: {user, setUser} }) {
         <button type="submit">Login</button>
       </form>
 
+      {isLoading && <p>Loading...</p>}
       <p>{error}</p>
 
       <p>Don't have an account? <a onClick={() => setPage(Pages.SIGNUP)}>Create Account</a></p>
