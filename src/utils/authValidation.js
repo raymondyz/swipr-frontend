@@ -1,10 +1,15 @@
 
 export function validateSignupEmail(email) {
-  return true
+  const regex_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const regex_ucla_email = /^[^\s@]+@(g\.)?ucla\.edu$/
+
+  return regex_email.test(email)
 }
 
 export function validateSignupPassword(password) {
-  return true
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+
+  return regex.test(password)
 }
 
 export const passwordRequirements = "Password must be at least 8 characters and contain at least one letter and number"
