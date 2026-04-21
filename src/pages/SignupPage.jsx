@@ -5,6 +5,8 @@ import { registerUser } from "../utils/api/authApi"
 import { fetchUserByEmail } from "../utils/api/userApi"
 
 function SignupPage({ setPage, auth: {user, setUser} }) {
+  const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,6 +17,18 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
     e.preventDefault()
     setError("")
     setIsLoading(true)
+
+    if (name == "") {
+      setError("Name cannot be blank!")
+      setIsLoading(false)
+      return
+    }
+
+    if (username == "") {
+      setError("Username cannot be blank!")
+      setIsLoading(false)
+      return
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords don't match!")
@@ -36,7 +50,7 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
 
     // Try to register user
     try {
-      await registerUser(email, password)
+      await registerUser(name, username, email, password)
 
       // Register successful
       setUser(await fetchUserByEmail(email))
@@ -56,6 +70,16 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
       <h1>Create an Account to Start Swiping!</h1>
       
       <form onSubmit={handleSignup}>
+        <label htmlFor="name">Name:</label>
+        <input
+          id="name"
+          onChange={(e) => setName(e.target.value)}
+        />
+        <label htmlFor="username">Username:</label>
+        <input
+          id="username"
+          onChange={(e) => setUsername(e.target.value)}
+        />
         <label htmlFor="email">Email:</label>
         <input
           id="email"

@@ -1,29 +1,45 @@
-export function registerUser(email, password) {
-  const isValid = true
+const BACKEND_API_URL = import.meta.env.VITE_BACKEND_API_URL;
 
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (isValid) {
-        resolve(true)
-      }
-      else {
-        reject(new Error("Failed to register, please report this bug!"))
-      }
-    }, 1000)
-  })
+export async function registerUser(name, username, email, password) {
+
+  const res = await fetch(
+    `${BACKEND_API_URL}/auth/signup`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, username, email, password })
+    }
+  )
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error);
+  }
+
+  return data
 }
 
-export function validateLogin(email, password) {
-  const isValid = true
+export async function validateLogin(email, password) {
 
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (isValid) {
-        resolve(true)
-      }
-      else {
-        reject(new Error("Incorrect email or password"))
-      }
-    }, 1000)
-  })
+  const res = await fetch(
+    `${BACKEND_API_URL}/auth/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    }
+  )
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error);
+  }
+
+  return data
 }

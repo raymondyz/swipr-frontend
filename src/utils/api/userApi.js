@@ -4,6 +4,7 @@ export function fetchUserByEmail(email) {
   const user = {
     id: null,
     name: null,
+    username: null,
     email: email,
     role: "user",
   }
