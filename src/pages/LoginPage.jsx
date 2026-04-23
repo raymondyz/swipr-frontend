@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Pages } from "../constants/pages"
 import { validateLogin } from "../utils/api/authApi"
-import { fetchUserByEmail } from "../utils/api/userApi"
+import { getUserByEmail } from "../utils/api/userApi"
 
 
 function LoginPage({ setPage, auth: {user, setUser} }) {
@@ -20,9 +20,17 @@ function LoginPage({ setPage, auth: {user, setUser} }) {
       await validateLogin(email, password)
       
       // Login successful
-      setUser(await fetchUserByEmail(email))
+      const fetchedUser = await getUserByEmail(email)
+      setUser(fetchedUser)
+
+      // Check if user is verified yet
+      if (fetchedUser.is_verified) {
+        setPage(Pages.HOME)
+      }
+      else {
+        setPage(Pages.SIGNUP)
+      }
       console.log("Login successful")
-      setPage(Pages.HOME)
     }
     catch (err) {
       console.log("Login failed")

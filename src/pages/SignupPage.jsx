@@ -1,10 +1,16 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Pages } from "../constants/pages"
 import { validateSignupEmail, validateSignupPassword, passwordRequirements } from "../utils/authValidation"
-import { registerUser } from "../utils/api/authApi"
-import { fetchUserByEmail } from "../utils/api/userApi"
+import { registerUser, sendVerificationCode, validateVerificationCode } from "../utils/api/authApi"
+import { getUserByEmail } from "../utils/api/userApi"
 
-function SignupPage({ setPage, auth: {user, setUser} }) {
+const Panels = Object.freeze({
+  REGISTRATION: "registration",
+  EMAIL_VERIFICATION: "EMAIL_verification",
+});
+
+
+function RegistrationPanel({ setPanel, auth: {user, setUser} }) {
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
@@ -53,9 +59,9 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
       await registerUser(name, username, email, password)
 
       // Register successful
-      setUser(await fetchUserByEmail(email))
-      console.log("Signup successful")
-      setPage(Pages.HOME)
+      setUser(await getUserByEmail(email))
+      console.log("Registration successful")
+      setPanel(Panels.EMAIL_VERIFICATION)
     }
     catch (err) {
       setError(err.message)
@@ -66,9 +72,7 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
   }
 
   return (
-    <>
-      <h1>Create an Account to Start Swiping!</h1>
-      
+    <>      
       <form onSubmit={handleSignup}>
         <label htmlFor="name">Name:</label>
         <input
@@ -100,6 +104,85 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
 
       {isLoading && <p>Loading...</p>}
       <p>{error}</p>
+    </>
+  )
+}
+
+function VerificationPanel({ setPage, auth: {user, setUser} }) {
+  const [isCodeSent, setIsCodeSent] = useState(false)
+  const [code, setCode] = useState("")
+  const [error, setError] = useState("")
+
+  async function handleSendCode() {
+    setError("")
+    try {
+      await sendVerificationCode(user.email)
+      if (!isCodeSent) {
+        setIsCodeSent(true)
+      }
+    }
+    catch (err) {
+      setError(err.message)
+    }
+  }
+
+  async function handleCodeSubmit(e) {
+    e.preventDefault()
+
+    setError("")
+    try {
+      await validateVerificationCode(user.email, code)
+      console.log("Verification successful")
+      setPage(Pages.HOME)
+    }
+    catch (err) {
+      setError(err.message)
+    }
+  }
+
+  return (
+    <>
+      {isCodeSent ? (
+        <>
+          <form onSubmit={handleCodeSubmit}>
+            <label htmlFor="code">Code:</label>
+            <input
+              id="code"
+              onChange={(e) => setCode(e.target.value)}
+            />
+            <button type="submit">Submit</button>
+          </form>
+          <p>{error}</p>
+          <p>Please check your spam folder!</p>
+          <p>Didn't get a code? <a onClick={handleSendCode}>Resend</a></p>
+        </>
+      ) : (
+        <>
+          <h2>Verify Your Email: {user.email}</h2>
+          <button onClick={handleSendCode}>Send Code</button>
+          <p>{error}</p>
+        </>
+      )}
+    </>
+  )
+}
+
+function SignupPage({ setPage, auth: {user, setUser} }) {
+  const [panel, setPanel] = useState(Panels.REGISTRATION)
+
+  useEffect(() => {
+    if (!user) return
+    if (!user.is_verified) {
+      setPanel(Panels.EMAIL_VERIFICATION)
+    }
+  }, [user])
+
+  return (
+    <>
+      <h1>Create an Account to Start Swiping!</h1>
+      
+      {panel === Panels.REGISTRATION && <RegistrationPanel setPanel={setPanel} auth={{user, setUser}} />}
+      {panel === Panels.EMAIL_VERIFICATION && <VerificationPanel setPage={setPage} auth={{user, setUser}} />}
 
       <p>Already have an account? <a onClick={() => setPage(Pages.LOGIN)}>Login</a></p>
     </>

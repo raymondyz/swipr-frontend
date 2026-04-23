@@ -1,9 +1,9 @@
 import { useState } from "react"
 import "./App.css"
 import LoginPage from "./pages/LoginPage"
-import RegiserPage from "./pages/SignupPage"
 import HomePage from "./pages/HomePage"
 import { Pages } from "./constants/pages"
+import SignupPage from "./pages/SignupPage"
 
 function App() {
   const [user, setUser] = useState(null)
@@ -19,7 +19,7 @@ function App() {
       </nav>
 
       {page === Pages.LOGIN && <LoginPage setPage={setPage} auth={{ user, setUser }} />}
-      {page === Pages.SIGNUP && <RegiserPage setPage={setPage} auth={{ user, setUser }} />}
+      {page === Pages.SIGNUP && <SignupPage setPage={setPage} auth={{ user, setUser }} />}
       {page === Pages.HOME && <HomePage setPage={setPage} auth={{ user, setUser }} />}
     </>
   )
