@@ -72,35 +72,43 @@ function RegistrationPanel({ setPanel, auth: {user, setUser} }) {
   }
 
   return (
-    <>      
+    <>   
       <form onSubmit={handleSignup}>
-        <label htmlFor="name">Name:</label>
-        <input
-          id="name"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label htmlFor="username">Username:</label>
-        <input
-          id="username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <label htmlFor="confirm-password">Confirm Password:</label>
-        <input
-          id="confirm-password"
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit">Signup</button>
-      </form>
+        <div className="emailAndPasswordBox">
+          <label htmlFor="name">Name:</label>
+          <input
+            className="credentialsBox"
+            id="name"
+            onChange={(e) => setName(e.target.value)}
+          />
+          <label htmlFor="username">Username:</label>
+          <input
+            className="credentialsBox"
+            id="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <label htmlFor="email">Email:</label>
+          <input
+            className="credentialsBox"
+            id="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <label htmlFor="password">Password:</label>
+          <input
+            className="credentialsBox"
+            id="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <label htmlFor="confirm-password">Confirm Password:</label>
+          <input
+            className="credentialsBox"
+            id="confirm-password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button className="bigAhhButton" type="submit">Signup</button>
+        </div>
+
+        </form>
 
       {isLoading && <p>Loading...</p>}
       <p>{error}</p>
@@ -179,7 +187,8 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
 
   return (
     <>
-      <h1>Create an Account to Start Swiping!</h1>
+    <img src="src/assets/images/swiprLogo.png" alt="Logo" className="Logo"></img>
+      <h2>Create an Account to Start Swiping!</h2>
       
       {panel === Panels.REGISTRATION && <RegistrationPanel setPanel={setPanel} auth={{user, setUser}} />}
       {panel === Panels.EMAIL_VERIFICATION && <VerificationPanel setPage={setPage} auth={{user, setUser}} />}
