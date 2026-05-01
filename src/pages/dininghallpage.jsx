@@ -1,18 +1,29 @@
 import { useState, useEffect } from "react"
 import { Pages } from "../constants/pages"
 
+
 function LocationsPanel({setPanel, locations:{choices,setAmount}}) {
     const [listoflocs, setlistoflocs] = useState("")
-
+    let locs = [
+        {label: "bplate", value: "bplate"}
+    ]
     async function handleLocations(e) {
         if (listoflocs.length === 0) {
-            SpeechSynthesisErrorEvent("yo you gotta select a location my user")
+            alert("yo you gotta select a location my user")
             setSelectedLocations(false)
             return
         }
     }
+    const onSubmit = async() => {
+        try {
+            
+        } catch(e) {
+            alert("pick at least one option!")
+        }
+    }
     return (
-        <form id="dropdownform">
+        <form id="dropdownform"
+        onSubmit={handleSubmit(onSubmit)}>
             <label>
             <select>
                 <option selection disable>Choose the dining locations!</option>
@@ -25,6 +36,9 @@ function LocationsPanel({setPanel, locations:{choices,setAmount}}) {
                 <option value="7">rendezvous</option>
                 <option value="8">the study</option>
             </select>
+            {locs.map((loc) => (
+                <option selectedloc = {loc.label}>{loc.value}</option>
+            ))}
             </label>
             <label>
                 <select>
