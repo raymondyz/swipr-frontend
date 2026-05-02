@@ -4,6 +4,10 @@ body{
     color: white;
 }
 
+.homePage{
+    color: black;
+}
+
 .loginCard{
     background-color: #2774ae;
     display: flex;

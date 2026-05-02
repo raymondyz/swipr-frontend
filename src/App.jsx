@@ -23,11 +23,11 @@ function App() {
         <div className="loginInfoBox">
           {page === Pages.LOGIN && <LoginPage setPage={setPage} auth={{ user, setUser }} />}
           {page === Pages.SIGNUP && <SignupPage setPage={setPage} auth={{ user, setUser }} />}
-          {page === Pages.HOME && <HomePage setPage={setPage} auth={{ user, setUser }} />}
         </div>
-
       </div>
-
+      <div className="homePage">
+        {page === Pages.HOME && <HomePage setPage={setPage} auth={{ user, setUser }} />}
+      </div>
 
     </>
   )
