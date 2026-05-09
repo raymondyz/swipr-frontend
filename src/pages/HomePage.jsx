@@ -7,7 +7,7 @@ function HomePage({ setPage, auth: {user, setUser}  }) {
   const [name, setName] = useState("")
 
   if (!user){
-    return (<h2>You are not currently logged in yet...</h2>)
+    return (<h2>You are not currently logged in yet... (also it should be impossible to get to this page lul)</h2>)
   }
   return (
     <>
