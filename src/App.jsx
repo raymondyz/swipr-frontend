@@ -9,22 +9,28 @@ function App() {
   const [user, setUser] = useState(null)
   const [page, setPage] = useState(Pages.LOGIN)
 
+  if(!user){
+    return (
+      <>
+        <p>[DEBUG] Logged in as: {user?.email}</p>
+        <div className="loginCard">
+          <nav>
+            <div className="pageCard">
+                <button onClick={() => setPage(Pages.LOGIN)}>Login Page</button>
+                <button onClick={() => setPage(Pages.SIGNUP)}>Signup Page</button>
+            </div>
+          </nav>
+          <div className="loginInfoBox">
+            {page === Pages.LOGIN && <LoginPage setPage={setPage} auth={{ user, setUser }} />}
+            {page === Pages.SIGNUP && <SignupPage setPage={setPage} auth={{ user, setUser }} />}
+          </div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
-      <p>[DEBUG] Logged in as: {user?.email}</p>
-      <div className="loginCard">
-        <nav>
-          <div className="pageCard">
-              <button onClick={() => setPage(Pages.LOGIN)}>Login Page</button>
-              <button onClick={() => setPage(Pages.SIGNUP)}>Signup Page</button>
-              <button onClick={() => setPage(Pages.HOME)}>Home Page</button>
-          </div>
-        </nav>
-        <div className="loginInfoBox">
-          {page === Pages.LOGIN && <LoginPage setPage={setPage} auth={{ user, setUser }} />}
-          {page === Pages.SIGNUP && <SignupPage setPage={setPage} auth={{ user, setUser }} />}
-        </div>
-      </div>
       <div className="homePage">
         {page === Pages.HOME && <HomePage setPage={setPage} auth={{ user, setUser }} />}
       </div>

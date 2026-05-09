@@ -67,6 +67,32 @@ button{
 }
 
 .Logo{
-    height: 100px;
+    height: 80px;
     width: auto;
+}
+
+.PFP{
+    height: 50px;
+    width: auto;
+}
+
+.sideNavBar{
+    background-color: grey;
+    width: 250px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.homePageContent{
+    background-color: #eee;
+    width: 100vh;
+    height: 100vh;
+}
+
+.masterHomePage{
+    display: flex;
+    flex-direction: row;
 }
