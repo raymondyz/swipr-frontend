@@ -41,7 +41,7 @@ function LoginPage({ setPage, auth: {user, setUser} }) {
   }
 
   return (
-    <>
+    <div className="loginInfoBox">
       <img src="src/assets/images/swiprLogo.png" alt="Logo" className="Logo"></img>
       <h2>Login to Start Swiping!</h2>
       
@@ -68,7 +68,7 @@ function LoginPage({ setPage, auth: {user, setUser} }) {
       <p>{error}</p>
 
       <p>Don't have an account? <a onClick={() => setPage(Pages.SIGNUP)}>Create Account</a></p>
-    </>
+    </div>
   )
 }
 

@@ -190,15 +190,15 @@ function SignupPage({ setPage, auth: {user, setUser} }) {
   }, [user])
 
   return (
-    <>
-    <img src="src/assets/images/swiprLogo.png" alt="Logo" className="Logo"></img>
-      <h2>Create an Account to Start Swiping!</h2>
-      
-      {panel === Panels.REGISTRATION && <RegistrationPanel setPanel={setPanel} auth={{user, setUser}} />}
-      {panel === Panels.EMAIL_VERIFICATION && <VerificationPanel setPage={setPage} auth={{user, setUser}} />}
+    <div className="loginInfoBox">
+      <img src="src/assets/images/swiprLogo.png" alt="Logo" className="Logo"></img>
+        <h2>Create an Account to Start Swiping!</h2>
+        
+        {panel === Panels.REGISTRATION && <RegistrationPanel setPanel={setPanel} auth={{user, setUser}} />}
+        {panel === Panels.EMAIL_VERIFICATION && <VerificationPanel setPage={setPage} auth={{user, setUser}} />}
 
-      <p>Already have an account? <a onClick={() => setPage(Pages.LOGIN)}>Login</a></p>
-    </>
+        <p>Already have an account? <a onClick={() => setPage(Pages.LOGIN)}>Login</a></p>
+    </div>
   )
 }
 
