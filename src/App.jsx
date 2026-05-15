@@ -9,7 +9,7 @@ function App() {
   const [user, setUser] = useState(null)
   const [page, setPage] = useState(Pages.LOGIN)
 
-  if(!user){
+  if(page != Pages.HOME){
     return (
       <>
         <p>[DEBUG] Logged in as: {user?.email}</p>

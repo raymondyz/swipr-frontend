@@ -121,6 +121,10 @@ function VerificationPanel({ setPage, auth: {user, setUser} }) {
   const [code, setCode] = useState("")
   const [error, setError] = useState("")
 
+  if (!user) {
+    return <h2>Loading account details...</h2>
+  }
+
   async function handleSendCode() {
     setError("")
     try {
